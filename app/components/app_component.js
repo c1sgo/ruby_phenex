@@ -1,4 +1,5 @@
 function AppComponent () {
+  // START JS METHOD
   js_method('init_component') = function() {
     RUBY['js_full_class_name'].superclass.initComponent.call(this);
 
@@ -21,15 +22,21 @@ function AppComponent () {
     // Initialize history
     Ext.History.init();
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('on_login') = function () {
     window.location = "RUBY['login_url']"
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('on_logout') = function () {
     window.location = "RUBY['logout_url']"
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('process_history') = function (token) {
     if (token) {
       this.loadComponent({name:token, container:'main-panel'});
@@ -37,23 +44,34 @@ function AppComponent () {
       Ext.getCmp('main-panel').removeChild();
     }
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('instantiate_component') = function (config) {
     this.findById('main-panel').instantiateChild(config);
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('app_load_component') = function (name) {
     Ext.History.add(name);
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('load_component_by_action') = function (action) {
     this.appLoadComponent(action.component || action.name);
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('on_toggle_config_mode') = function (params) {
     this.toggleConfigMode();
   }
+  // END JS METHOD
 
+  // START JS METHOD
   js_method('show_masquerade_selector') = function () {
   }
+  // END JS METHOD
 }

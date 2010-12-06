@@ -1,6 +1,7 @@
-class AppComponent < BaseComponent
+class AppComponent < Netzke::Base
+  include ComponentExt
+  
   js_base_class "Ext.Viewport"
-
   js_property :layout, :border
 
   def self.include_js
@@ -35,17 +36,13 @@ class AppComponent < BaseComponent
         :height => 22,
         :statusAlign => 'right',
         :busyText => 'Busy...',
-        :default_text => 'Hello there',
+        :default_text => 'Ready.',
         :default_icon_cls => ""
       }]
     }
   end
 
   js_method :init_component
-
-  js_method :on_login
-  
-  js_method :on_logout
 
   js_method :process_history
 
@@ -65,7 +62,8 @@ class AppComponent < BaseComponent
   end
 
   def user_menu
-    [:logout.action]
+    [:logout.action
+    ]
   end
 
   def initialize(*args)
