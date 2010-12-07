@@ -17,31 +17,68 @@ class AppComponent < Netzke::Base
   class_attribute :logout_url
   self.logout_url = "/logout"
 
-  config do
+  def menu
     {
-      :items => [{
-        :id => 'main-panel',
-        :region => 'center',
-        :layout => 'fit'
-      },{
-        :id => 'main-toolbar',
-        :xtype => 'toolbar',
-        :region => 'north',
-        :height => 25,
-        :items => menu
-      },{
-        :id => 'main-statusbar',
-        :xtype => 'statusbar',
-        :region => 'south',
-        :height => 22,
-        :statusAlign => 'right',
-        :busyText => 'Busy...',
-        :default_text => 'Ready.',
-        :default_icon_cls => ""
-      }]
+      :text => "Tutorials",
+      :menu => %w{ characters }
     }
   end
 
+  config do
+    {
+      :region => 'center',
+      :layout => 'border',
+      :items => [
+        {
+          :region => 'north',
+          :height => 40,
+          :html => %Q{
+            <div>
+              EQ demo app
+            </div>
+          }
+        },{
+          :region => 'center',
+          :layout => 'border',
+          :items => [
+            {
+              :id => 'main-panel',
+              :region => 'center',
+              :layout => 'fit'
+            },{
+              :xtype => 'treepanel',
+              :region => 'west',
+              :width => 150,
+              :root => {
+                text: "Records",
+                children: [
+                  { text: "Characters",
+                    leaf: true
+                  },
+                  { text: "States",
+                    leaf: true
+                  }
+              ]
+              },
+              listeners: {
+                click: { fn: js_method(:on_click) }
+              }
+            },{
+              :id => 'main-statusbar',
+              :xtype => 'statusbar',
+              :region => 'south',
+              :height => 22,
+              :statusAlign => 'right',
+              :busyText => 'Busy...',
+              :default_text => 'Ready.',
+              :default_icon_cls => ""
+            }
+          ]
+        }
+      ]
+    }
+  end
+  
   js_method :init_component
 
   js_method :process_history
@@ -54,12 +91,11 @@ class AppComponent < Netzke::Base
 
   js_method :on_toggle_config_mode
 
-  # Set the Logout button if Netzke::Base.user is set
-  def menu
-    res = []
-    res << "->" << :login.action
-    res
-  end
+  js_method :on_click
+
+  js_method :load_view
+
+  
 
   def user_menu
     [:logout.action
@@ -88,7 +124,9 @@ class AppComponent < Netzke::Base
 
   action :logout, :icon => :door_out
 
-  # Html required for Ext.History to work
+  action :characters, :text => "Characters", :handler => :load_component_by_action
+
+  # HTML required for Ext.History to work
   def js_component_html
     super << %Q{
 <form id="history-form" class="x-hidden">
@@ -101,6 +139,13 @@ class AppComponent < Netzke::Base
   #
   # Interface section
   #
+
+  endpoint :characters do |params|
+    {
+      :main_panel => { :set_text => "Hello there" }
+    }
+  end
+
   endpoint :toggle_config_mode do |params|
     session = Netzke::Base.session
     session[:config_mode] = !session[:config_mode]

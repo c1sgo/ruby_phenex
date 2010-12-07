@@ -3,12 +3,12 @@ class BaseComponent < Netzke::Base
 
   class << self
     def js_method name
-      super name, @@js_methods[name]
+      super name, @js_methods[name]
     end
 
     def parse_js_methods_file
       debugger
-      @@js_methods = "hello"
+      @js_methods = "hello"
     end
   end
 end
